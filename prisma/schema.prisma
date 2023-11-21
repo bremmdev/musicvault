@@ -1,0 +1,88 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Band {
+  id          String    @id @default(cuid())
+  name        String
+  country     String
+  formedIn    String
+  disbandedIn String?
+  lastChecked DateTime?
+  rating      Rating    @relation(fields: [ratingId], references: [id])
+  ratingId    String
+  albums      Album[]
+  songs       Song[]
+  genres      Genre[]
+
+  @@unique([name, country])
+}
+
+model Album {
+  id             String           @id @default(cuid())
+  title          String
+  imageUrl       String?
+  yearReleased   String
+  band           Band             @relation(fields: [bandId], references: [id])
+  bandId         String
+  songs          Song[]
+  genres         Genre[]
+  rating         Rating           @relation(fields: [ratingId], references: [id])
+  ratingId       String
+  collectionItem CollectionItem[]
+
+  @@unique([title, bandId])
+  @@index(yearReleased)
+}
+
+model Song {
+  id           String  @id @default(cuid())
+  title        String
+  yearReleased String
+  band         Band    @relation(fields: [bandId], references: [id])
+  bandId       String
+  album        Album   @relation(fields: [albumId], references: [id])
+  albumId      String
+  genres       Genre[]
+  rating       Rating  @relation(fields: [ratingId], references: [id])
+  ratingId     String
+
+  @@unique([title, bandId])
+  @@index(yearReleased)
+}
+
+model Genre {
+  id     String  @id @default(cuid())
+  name   String
+  bands  Band[]
+  albums Album[]
+  songs  Song[]
+}
+
+model Rating {
+  id     String  @id @default(cuid())
+  value  String
+  bands  Band[]
+  albums Album[]
+  songs  Song[]
+}
+
+model CollectionItem {
+  id            String    @id @default(cuid())
+  recordLabel   String
+  catalogNumber String
+  yearReleased  String
+  firstPressing Boolean
+  dateAdded     DateTime?
+  pricePaid     Decimal?  @db.Decimal(6, 2)
+  album         Album     @relation(fields: [albumId], references: [id])
+  albumId       String
+}
