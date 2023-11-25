@@ -1,6 +1,5 @@
 import { prisma } from "@/lib/db";
 import BandsTable from "@/components/bands/BandsTable";
-import NewBand from "@/components/bands/NewBand";
 
 export default async function BandsPage() {
   const bands = await prisma.band.findMany({
@@ -22,9 +21,8 @@ export default async function BandsPage() {
 
   return (
     <>
-      <h1 className="text-3xl font-extralight text-center my-8">Bands</h1>
-      <BandsTable bands={bands} />
-      <NewBand ratings={ratings} genres={genres} />
+      <h1 className="text-3xl font-extralight text-center mt-12 mb-6">Bands</h1>
+      <BandsTable bands={bands} ratings={ratings} genres={genres} />
     </>
   );
 }

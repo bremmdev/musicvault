@@ -14,6 +14,15 @@ export const createBandSchema = z.object({
     .string()
     .regex(/^\d{4}$/, { message: "Disbanded in must be a valid year" })
     .nullable(),
+  lastChecked: z
+    .date({
+      invalid_type_error: "Last checked must be a valid date",
+    })
+    .nullable(),
   genres: z.array(z.string().min(1, { message: "Genre must be selected" })),
   ratingId: z.string().min(1, { message: "Rating must be selected" }),
+});
+
+export const updateBandSchema = createBandSchema.extend({
+  id: z.string(),
 });

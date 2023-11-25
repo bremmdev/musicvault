@@ -6,3 +6,8 @@ export type BandWithDetails = Prisma.BandGetPayload<{
     rating: true
   }
 }> 
+
+export type DeleteError = {
+  message: string;
+  id: string;
+};
