@@ -1,4 +1,4 @@
-export const revalidate = 5;
+export const dynamic = 'force-dynamic';
 
 import { prisma } from "@/lib/db";
 import BandsTable from "@/components/bands/BandsTable";
@@ -28,3 +28,5 @@ export default async function BandsPage() {
     </>
   );
 }
+
+
