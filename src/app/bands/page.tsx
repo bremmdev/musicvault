@@ -1,3 +1,5 @@
+export const revalidate = 5;
+
 import { prisma } from "@/lib/db";
 import BandsTable from "@/components/bands/BandsTable";
 
