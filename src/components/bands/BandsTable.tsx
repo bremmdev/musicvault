@@ -14,22 +14,16 @@ import { Star, Pencil } from "lucide-react";
 import { cn } from "@/lib/utils";
 import deleteBand from "@/_actions/delete-band";
 import DeleteButton from "../ui/DeleteButton";
-import CreateOrEditBand from "./CreateOrEditBand";
-import { Rating, Genre } from "@prisma/client";
-import { PlusCircle } from "lucide-react";
-import { Button } from "../ui/button";
+
 import useBandStore from "@/store/bands";
-import { set } from "zod";
 
 type Props = {
   bands: Array<BandWithDetails>;
-  ratings: Array<Rating>;
-  genres: Array<Genre>;
+  children?: React.ReactNode;
 };
 
-const BandsTable = ({ bands, ratings, genres }: Props) => {
+const BandsTable = ({ bands }: Props) => {
   const {
-    showForm,
     setShowForm,
     isDeleting,
     setIsDeleting,
@@ -39,11 +33,16 @@ const BandsTable = ({ bands, ratings, genres }: Props) => {
   } = useBandStore();
 
   //optimistic updates for delete
-  const [optimisticBands, setOptimisticBands] = React.useOptimistic(bands, (state, newBands: Array<BandWithDetails>) => newBands);
+  const [optimisticBands, setOptimisticBands] = React.useOptimistic(
+    bands,
+    (state, newBands: Array<BandWithDetails>) => newBands
+  );
 
   //reset optimistic bands when bands change
   React.useEffect(() => {
-    setOptimisticBands(bands);
+    React.startTransition(() => {
+      setOptimisticBands(bands);
+    });
   }, [bands, setOptimisticBands]);
 
   async function handleDelete(id: string) {
@@ -69,11 +68,6 @@ const BandsTable = ({ bands, ratings, genres }: Props) => {
     setSelectedBand(band);
     setShowForm(true);
     setDeleteError(null);
-  };
-
-  const handleClick = () => {
-    setDeleteError(null);
-    setShowForm(true);
   };
 
   return (
@@ -160,16 +154,6 @@ const BandsTable = ({ bands, ratings, genres }: Props) => {
           })}
         </TableBody>
       </Table>
-      {showForm ? (
-        <CreateOrEditBand ratings={ratings} genres={genres} />
-      ) : (
-        <Button
-          className="flex gap-2 w-fit mx-auto my-8"
-          onClick={handleClick}
-        >
-          Add band <PlusCircle strokeWidth={2} size={20} />
-        </Button>
-      )}
     </>
   );
 };
