@@ -27,7 +27,7 @@ export default async function createBand(data: unknown) {
     await prisma.band.create({
       data: createData,
     });
-    revalidatePath("/");
+    revalidatePath("/bands");
   } catch (error) {
     let message = ["Server error"];
 

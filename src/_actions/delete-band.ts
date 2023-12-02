@@ -8,7 +8,7 @@ export default async function deleteBand(id: string) {
     await prisma.band.delete({
       where: { id: id },
     });
-    revalidatePath("/");
+    revalidatePath("/bands");
   } catch (error) {
     return {
       error: "Deleting band failed",

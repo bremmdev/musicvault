@@ -28,7 +28,7 @@ export default async function updateBand(data: unknown) {
       where: { id: parsed.data.id },
       data: updateData,
     });
-    revalidatePath("/");
+    revalidatePath("/bands");
   } catch (error) {
     let message = ["Server error"];
 
