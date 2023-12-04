@@ -9,25 +9,15 @@ export const AuthOptions = {
   ],
   callbacks: {
     // Ref: https://authjs.dev/guides/basics/role-based-access-control#persisting-the-role
-    async jwt({ token, user, session }: any) {
-      if (user) {
-        return {
-          ...token,
-          isAdmin: user.email === "bremmdev@gmail.com" ? true : false,
-        };
-      }
+    async jwt({ token, user }: any) {
+      if (user) token.isAdmin = user.email === "bremmdev@gmail.com";
+      return token;
     },
+
     // If you want to use the role in client components
-    async session({ session, token, user }: any) {
-      if (session) {
-        return {
-          ...session,
-          user: {
-            ...session.user,
-            isAdmin: session.user.email === "bremmdev@gmail.com" ? true : false,
-          },
-        };
-      }
+    async session({ session, token }: any) {
+      if (session?.user) session.user.isAdmin = token.isAdmin;
+      return session;
     },
   },
 };

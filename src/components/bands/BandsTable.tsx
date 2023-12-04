@@ -42,8 +42,6 @@ const BandsTable = ({ bands }: Props) => {
   const { data: session } = useSession() 
   const isAdmin = (session as SessionWithAdmin)?.user?.isAdmin
 
-  console.log('ad', isAdmin)
-
   //reset optimistic bands when bands change
   React.useEffect(() => {
     React.startTransition(() => {
