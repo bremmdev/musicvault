@@ -1,6 +1,6 @@
 import React from "react";
 import { getServerSession } from "next-auth/next";
-import { AuthOptions } from "@/app/auth/[...nextauth]/route";
+import { AuthOptions } from "@/app/auth/[...nextauth]/options";
 
 export default async function CollectionPage() {
   const session = await getServerSession(AuthOptions);

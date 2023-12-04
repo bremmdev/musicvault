@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/db";
 import CreateOrEditForm from "./CreateOrEditForm";
-import { AuthOptions } from "@/app/auth/[...nextauth]/route";
+import { AuthOptions } from "@/app/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth/next";
 
 export default async function CreateOrEditBand() {

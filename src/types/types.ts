@@ -1,12 +1,13 @@
-import { Prisma } from '@prisma/client'
-import { Session } from 'next-auth'
+import { Prisma } from "@prisma/client";
+import { Session } from "next-auth";
+import { JWT } from "next-auth/jwt";
 
 export type BandWithDetails = Prisma.BandGetPayload<{
   include: {
-    genres: true
-    rating: true
-  }
-}> 
+    genres: true;
+    rating: true;
+  };
+}>;
 
 export type DeleteError = {
   message: string;
@@ -22,6 +23,14 @@ export type User = {
 
 export type SessionWithAdmin = Session & {
   user: {
-    isAdmin: boolean
-  }
+    isAdmin: boolean;
+  };
+};
+
+export interface Token extends JWT {
+  isAdmin?: boolean;
+}
+
+export interface UserWithAdmin extends User {
+  isAdmin?: boolean;
 }
