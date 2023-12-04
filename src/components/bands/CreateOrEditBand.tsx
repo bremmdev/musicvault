@@ -6,7 +6,7 @@ import { getServerSession } from "next-auth/next";
 export default async function CreateOrEditBand() {
   const session = await getServerSession(AuthOptions);
 
-  const isAdmin = session?.user?.email === "bremmdev@gmail.com";
+  const isAdmin = session?.user?.isAdmin;
 
   if (!isAdmin) {
     return null;
