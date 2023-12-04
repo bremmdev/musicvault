@@ -17,17 +17,16 @@ export const AuthOptions = {
       clientSecret: process.env.GITHUB_SECRET as string,
     }),
   ],
-
-  callbacks: {
-    // Ref: https://authjs.dev/guides/basics/role-based-access-control#persisting-the-role
-    async jwt({ token, user }: { token: Token; user: UserWithAdmin }) {
-      if (user) token.isAdmin = user.isAdmin;
-      return token;
-    },
-    // If you want to use the role in client components
-    async session({ session, token }: { session: any; token: Token }) {
-      session.user.isAdmin = token.isAdmin;
-      return session;
-    },
-  },
+  // callbacks: {
+  //   // Ref: https://authjs.dev/guides/basics/role-based-access-control#persisting-the-role
+  //   async jwt({ token, user }: { token: Token; user: UserWithAdmin }) {
+  //     if (user) token.isAdmin = user.isAdmin;
+  //     return token;
+  //   },
+  //   // If you want to use the role in client components
+  //   async session({ session, token }: { session: any; token: Token }) {
+  //     session.user.isAdmin = token.isAdmin;
+  //     return session;
+  //   },
+  // },
 };

@@ -4,7 +4,7 @@ import { AuthOptions } from "@/app/auth/[...nextauth]/options";
 
 export default async function CollectionPage() {
   const session = await getServerSession(AuthOptions);
-  const isAdmin = session?.user?.isAdmin
+  const isAdmin = session?.user?.email === 'bremmdev@gmail.com'
 
   return isAdmin ? (
     <div>Collection</div>
