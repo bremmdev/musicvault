@@ -15,7 +15,9 @@ export const AuthOptions = {
       },
       clientId: process.env.GITHUB_ID as string,
       clientSecret: process.env.GITHUB_SECRET as string,
+
     }),
+  
   ],
   // callbacks: {
   //   // Ref: https://authjs.dev/guides/basics/role-based-access-control#persisting-the-role

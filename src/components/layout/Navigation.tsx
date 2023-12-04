@@ -24,9 +24,9 @@ const Navigation = () => {
   const profileImage = session?.user?.image;
 
   return (
-    <header className="relative mx-auto flex justify-center gap-8 items-center bg-gradient-to-r from-slate-200 via-slate-50 to-slate-200 py-5">
-      <nav>
-        <ul className="flex justify-center gap-2 sm:gap-4 text-base sm:text-lg font-light">
+    <header className="mx-auto bg-gradient-to-r from-slate-200 via-slate-50 to-slate-200 py-5">
+      <nav className="w-11/12 max-w-7xl mx-auto relative flex flex-col gap-4 sm:flex-row items-center justify-center">
+        <ul className="flex justify-center gap-2 sm:gap-4 text-base md:text-lg font-light">
           {links.map(({ href, label }, idx) => {
             const isActive = href.startsWith(pathname);
             return (
@@ -46,33 +46,35 @@ const Navigation = () => {
             );
           })}
         </ul>
+        <div className="sm:absolute sm:right-0">
+          <Suspense fallback={<Spinner />}>
+            {isAuthed ? (
+              <Link
+                className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300 border bg-white hover:bg-slate-100 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-950 dark:hover:bg-slate-800 dark:hover:text-slate-50 h-10 px-4 py-2 border-slate-400"
+                href="/api/auth/signout"
+              >
+                <span>Sign out</span>
+                {profileImage ? (
+                  <Image
+                    className="rounded-full ml-2"
+                    src={profileImage}
+                    width={24}
+                    height={24}
+                    alt="profile picture"
+                  />
+                ) : null}
+              </Link>
+            ) : (
+              <Link
+                className="items-center justify-center rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300 bg-slate-900 text-slate-50 hover:bg-slate-900/90 dark:bg-slate-50 dark:text-slate-900 dark:hover:bg-slate-50/90 h-10 px-4 py-2 flex gap-2 w-fit"
+                href="/api/auth/signin"
+              >
+                Sign in
+              </Link>
+            )}
+          </Suspense>
+        </div>
       </nav>
-      <Suspense fallback={<Spinner />}>
-        {isAuthed ? (
-          <Link
-            className="absolute right-8 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300 border bg-white hover:bg-slate-100 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-950 dark:hover:bg-slate-800 dark:hover:text-slate-50 h-10 px-4 py-2 border-slate-400"
-            href="/auth/signout"
-          >
-            <span>Sign out</span>
-            {profileImage ? (
-              <Image
-                className="rounded-full ml-2"
-                src={profileImage}
-                width={24}
-                height={24}
-                alt="profile picture"
-              />
-            ) : null}
-          </Link>
-        ) : (
-          <Link
-            className="items-center justify-center rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300 bg-slate-900 text-slate-50 hover:bg-slate-900/90 dark:bg-slate-50 dark:text-slate-900 dark:hover:bg-slate-50/90 h-10 px-4 py-2 flex gap-2 w-fit"
-            href="/auth/signin"
-          >
-            Sign in
-          </Link>
-        )}
-      </Suspense>
     </header>
   );
 };
