@@ -14,8 +14,9 @@ import { Star, Pencil } from "lucide-react";
 import { cn } from "@/lib/utils";
 import deleteBand from "@/_actions/delete-band";
 import DeleteButton from "../ui/DeleteButton";
-
+import { useSession } from 'next-auth/react'
 import useBandStore from "@/store/bands";
+import { SessionWithAdmin } from "@/types/types";
 
 type Props = {
   bands: Array<BandWithDetails>;
@@ -37,6 +38,9 @@ const BandsTable = ({ bands }: Props) => {
     bands,
     (state, newBands: Array<BandWithDetails>) => newBands
   );
+
+  const { data: session } = useSession() 
+  const isAdmin = (session as SessionWithAdmin)?.user?.isAdmin!
 
   //reset optimistic bands when bands change
   React.useEffect(() => {
@@ -123,6 +127,7 @@ const BandsTable = ({ bands }: Props) => {
                   <TableCell>{genres}</TableCell>
                   <TableCell>{lastCheckText}</TableCell>
                   <TableCell>
+                    {isAdmin ? (
                     <span className="flex gap-2">
                       <button disabled={isDeleting}>
                         <Pencil
@@ -137,6 +142,7 @@ const BandsTable = ({ bands }: Props) => {
                         disabled={isDeleting}
                       ></DeleteButton>
                     </span>
+                    ) : null}
                   </TableCell>
                 </TableRow>
                 {hasDeleteError && (

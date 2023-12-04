@@ -3,7 +3,11 @@
 import React from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import Separator from "../ui/Separator";
+import Image from "next/image";
+import Spinner from "../ui/Spinner";
+import { Suspense } from "react";
 
 const links = [
   { href: "/bands", label: "bands" },
@@ -13,27 +17,63 @@ const links = [
 ];
 
 const Navigation = () => {
-
   const pathname = usePathname();
+  const { data: session } = useSession();
+
+  const isAuthed = session?.user?.email;
+  const profileImage = session?.user?.image;
 
   return (
-    <nav className="mx-auto bg-gradient-to-r from-slate-200 via-slate-50 to-slate-200 py-5">
-      <ul className="flex justify-center gap-2 sm:gap-4 text-base sm:text-lg font-light">
-        {links.map(({ href, label }, idx) => {
-          const isActive = href.startsWith(pathname);
-          return (
-            <React.Fragment key={label}>
-              <li>
-                <Link href={href} className={`nav-link ${isActive ? 'font-medium' : '' } relative`}>
-                  {label}
-                </Link>
-              </li>
-              {idx !== links.length - 1 ? <Separator /> : null}
-            </React.Fragment>
-          );
-        })}
-      </ul>
-    </nav>
+    <header className="relative mx-auto flex justify-center gap-8 items-center bg-gradient-to-r from-slate-200 via-slate-50 to-slate-200 py-5">
+      <nav>
+        <ul className="flex justify-center gap-2 sm:gap-4 text-base sm:text-lg font-light">
+          {links.map(({ href, label }, idx) => {
+            const isActive = href.startsWith(pathname);
+            return (
+              <React.Fragment key={label}>
+                <li>
+                  <Link
+                    href={href}
+                    className={`nav-link ${
+                      isActive ? "font-medium" : ""
+                    } relative`}
+                  >
+                    {label}
+                  </Link>
+                </li>
+                {idx !== links.length - 1 ? <Separator /> : null}
+              </React.Fragment>
+            );
+          })}
+        </ul>
+      </nav>
+      <Suspense fallback={<Spinner />}>
+        {isAuthed ? (
+          <Link
+            className="absolute right-8 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300 border bg-white hover:bg-slate-100 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-950 dark:hover:bg-slate-800 dark:hover:text-slate-50 h-10 px-4 py-2 border-slate-400"
+            href="/auth/signout"
+          >
+            <span>Sign out</span>
+            {profileImage ? (
+              <Image
+                className="rounded-full ml-2"
+                src={profileImage}
+                width={24}
+                height={24}
+                alt="profile picture"
+              />
+            ) : null}
+          </Link>
+        ) : (
+          <Link
+            className="items-center justify-center rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300 bg-slate-900 text-slate-50 hover:bg-slate-900/90 dark:bg-slate-50 dark:text-slate-900 dark:hover:bg-slate-50/90 h-10 px-4 py-2 flex gap-2 w-fit"
+            href="/auth/signin"
+          >
+            Sign in
+          </Link>
+        )}
+      </Suspense>
+    </header>
   );
 };
 
