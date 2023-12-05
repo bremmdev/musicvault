@@ -39,9 +39,8 @@ const BandsTable = ({ bands }: Props) => {
     (state, newBands: Array<BandWithDetails>) => newBands
   );
 
-  const { data: session } = useSession() 
-  const isAdmin = (session as SessionWithAdmin)?.user?.isAdmin
-
+  const { data: session, status: authStatus } = useSession() 
+ 
   //reset optimistic bands when bands change
   React.useEffect(() => {
     React.startTransition(() => {
@@ -127,7 +126,7 @@ const BandsTable = ({ bands }: Props) => {
                   <TableCell>{genres}</TableCell>
                   <TableCell>{lastCheckText}</TableCell>
                   <TableCell>
-                    {isAdmin ? (
+                    {authStatus === "authenticated" ? (
                     <span className="flex gap-2">
                       <button disabled={isDeleting}>
                         <Pencil

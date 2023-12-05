@@ -148,3 +148,16 @@ export const bands = [
     },
   },
 ];
+
+export const users = [
+  {
+    id: "clpsslsga000108jz30it20mz",
+    username: "bremmdev",
+    role: "admin",
+  },
+  {
+    id: "clpssmhw0000208jz64k3f8ze",
+    username: "bremmtesting",
+    role: "user",
+  },
+];

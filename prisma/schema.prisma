@@ -86,3 +86,9 @@ model CollectionItem {
   album         Album     @relation(fields: [albumId], references: [id])
   albumId       String
 }
+
+model User {
+  id       String @id @default(cuid())
+  username String @unique
+  role     String
+}

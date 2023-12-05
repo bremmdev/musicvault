@@ -1,6 +1,8 @@
-import GithubProvider from "next-auth/providers/github";
+import GithubProvider, { GithubProfile } from "next-auth/providers/github";
+import { NextAuthOptions } from "next-auth";
+import { prisma } from "@/lib/db";
 
-export const AuthOptions = {
+export const AuthOptions: NextAuthOptions = {
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID as string,
@@ -9,15 +11,17 @@ export const AuthOptions = {
   ],
   callbacks: {
     // Ref: https://authjs.dev/guides/basics/role-based-access-control#persisting-the-role
-    async jwt({ token, user }: any) {
-      if (user) token.isAdmin = user.email === "bremmdev@gmail.com";
-      return token;
-    },
+    async signIn({ user, account, profile }) {
+      const username = (profile as GithubProfile)?.login;
+      const adminUser = await prisma.user.findUnique({
+        where: { username, role: "admin" },
+      });
 
-    // If you want to use the role in client components
-    async session({ session, token }: any) {
-      if (session?.user) session.user.isAdmin = token.isAdmin;
-      return session;
+      //we found an admin user with this username
+      if (adminUser) {
+        return true;
+      }
+      return false;
     },
   },
 };
