@@ -4,9 +4,18 @@ import { prisma } from "@/lib/db";
 import { Prisma } from "@prisma/client";
 import { updateBandSchema } from "@/lib/schema";
 import { revalidatePath } from "next/cache";
+import { getServerSession } from "next-auth";
+import { AuthOptions } from "@/app/api/auth/[...nextauth]/options";
 
 export default async function updateBand(data: unknown) {
   const parsed = updateBandSchema.safeParse(data);
+  const session = await getServerSession(AuthOptions);
+
+  if (!session) {
+    return {
+      errors: ["Not authenticated"],
+    };
+  }
 
   //return zod errors if server-side validation fails
   if (!parsed.success) {
