@@ -19,7 +19,7 @@ model Band {
   lastChecked DateTime?
   rating      Rating    @relation(fields: [ratingId], references: [id])
   ratingId    String
-  albums      Album[]
+  albums      Album[]   
   songs       Song[]
   genres      Genre[]
 
@@ -31,7 +31,7 @@ model Album {
   title          String
   imageUrl       String?
   yearReleased   String
-  band           Band             @relation(fields: [bandId], references: [id])
+  band           Band             @relation(fields: [bandId], references: [id], onDelete: Restrict)
   bandId         String
   songs          Song[]
   genres         Genre[]
@@ -47,7 +47,7 @@ model Song {
   id           String  @id @default(cuid())
   title        String
   yearReleased String
-  band         Band    @relation(fields: [bandId], references: [id])
+  band         Band    @relation(fields: [bandId], references: [id], onDelete: Restrict)
   bandId       String
   album        Album   @relation(fields: [albumId], references: [id])
   albumId      String
@@ -92,3 +92,5 @@ model User {
   username String @unique
   role     String
 }
+
+

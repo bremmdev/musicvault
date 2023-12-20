@@ -149,6 +149,52 @@ export const bands = [
   },
 ];
 
+export const albums = [
+  {
+    id: "clq8ia7zq000008l965ci2ec8",
+    title: "The Satanist",
+    yearReleased: "2014",
+    ratingId: "clp70ltoz000008l89kdnduo0",
+    bandId: "clp71epc8000t08lc6a1v11l9",
+    genres: {
+      connect: [{ id: "clp7133qr000508lc0g2u6e75" }],
+    },
+  },
+  {
+    id: "clq8ig10t000108l9c35i4h75",
+    title: "The Demigod",
+    yearReleased: "2004",
+    ratingId: "clp70m990000108l89lv85ts1",
+    bandId: "clp71epc8000t08lc6a1v11l9",
+    genres: {
+      connect: [{ id: "clp7133qr000508lc0g2u6e75" }],
+    },
+  },
+  {
+    id: "clq8ig8ko000208l95h3t2c82",
+    title: "The Apostasy",
+    yearReleased: "2007",
+    ratingId: "clp70m990000108l89lv85ts1",
+    bandId: "clp71epc8000t08lc6a1v11l9",
+    genres: {
+      connect: [{ id: "clp7133qr000508lc0g2u6e75" }],
+    },
+  },
+  {
+    id: "clqe36a5b000708lf3vhjb5wq",
+    title: "No Sun Today",
+    yearReleased: "1997",
+    ratingId: "clp70m990000108l89lv85ts1",
+    bandId: "clp75ju7j000008jobr4bchcw",
+    genres: {
+      connect: [
+        { id: "clp712bxa000208lce93p0euj" },
+        { id: "clp714h53000h08lc6psi5tld" },
+      ],
+    },
+  },
+];
+
 export const users = [
   {
     id: "clpsslsga000108jz30it20mz",
