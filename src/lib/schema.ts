@@ -26,3 +26,21 @@ export const createBandSchema = z.object({
 export const updateBandSchema = createBandSchema.extend({
   id: z.string(),
 });
+
+export const createAlbumSchema = z.object({
+  title: z
+    .string()
+    .min(2, { message: "Title must be at least 2 characters long" }),
+  imageUrl: z.string().nullable(),
+  yearReleased: z
+    .string()
+    .regex(/^\d{4}$/, { message: "Year released must be a valid year" }),
+  genres: z.array(z.string().min(1, { message: "Genre must be selected" })),
+  bandId: z.string().min(1, { message: "Band must be selected" }),
+  ratingId: z.string().min(1, { message: "Rating must be selected" }),
+});
+
+export const updateAlbumSchema = createAlbumSchema.extend({
+  id: z.string(),
+});
+

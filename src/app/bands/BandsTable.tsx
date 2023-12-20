@@ -8,15 +8,14 @@ import {
   TableHead,
   TableBody,
   TableCell,
-} from "../ui/table";
+} from "../../components/ui/table";
 import { BandWithDetails } from "@/types/types";
 import { Star, Pencil } from "lucide-react";
 import { cn } from "@/lib/utils";
-import deleteBand from "@/_actions/delete-band";
-import DeleteButton from "../ui/DeleteButton";
-import { useSession } from 'next-auth/react'
+import deleteBand from "@/_actions/bands/delete-band";
+import DeleteButton from "../../components/ui/DeleteButton";
+import { useSession } from "next-auth/react";
 import useBandStore from "@/store/bands";
-import { SessionWithAdmin } from "@/types/types";
 
 type Props = {
   bands: Array<BandWithDetails>;
@@ -39,8 +38,8 @@ const BandsTable = ({ bands }: Props) => {
     (state, newBands: Array<BandWithDetails>) => newBands
   );
 
-  const { data: session, status: authStatus } = useSession() 
- 
+  const { data: session, status: authStatus } = useSession();
+
   //reset optimistic bands when bands change
   React.useEffect(() => {
     React.startTransition(() => {
@@ -52,7 +51,9 @@ const BandsTable = ({ bands }: Props) => {
     setDeleteError(null);
     //optimistic update
     const newOptimisticBands = optimisticBands.filter((band) => band.id !== id);
-    setOptimisticBands(newOptimisticBands);
+    React.startTransition(() => {
+      setOptimisticBands(newOptimisticBands);
+    });
     setIsDeleting(true);
     const res = await deleteBand(id);
     if (res?.error) {
@@ -127,20 +128,20 @@ const BandsTable = ({ bands }: Props) => {
                   <TableCell>{lastCheckText}</TableCell>
                   <TableCell>
                     {authStatus === "authenticated" ? (
-                    <span className="flex gap-2">
-                      <button disabled={isDeleting}>
-                        <Pencil
-                          onClick={handleEditClick.bind(null, band)}
-                          className="cursor-pointer w-5 h-5 stroke-slate-700 hover:stroke-black transition-all"
-                          strokeWidth={1}
-                        />
-                      </button>
-                      <DeleteButton
-                        onClick={() => handleDelete(band.id)}
-                        aria-label="delete band"
-                        disabled={isDeleting}
-                      ></DeleteButton>
-                    </span>
+                      <span className="flex gap-2">
+                        <button disabled={isDeleting}>
+                          <Pencil
+                            onClick={handleEditClick.bind(null, band)}
+                            className="cursor-pointer w-5 h-5 stroke-slate-700 hover:stroke-black transition-all"
+                            strokeWidth={1}
+                          />
+                        </button>
+                        <DeleteButton
+                          onClick={() => handleDelete(band.id)}
+                          aria-label="delete band"
+                          disabled={isDeleting}
+                        ></DeleteButton>
+                      </span>
                     ) : null}
                   </TableCell>
                 </TableRow>

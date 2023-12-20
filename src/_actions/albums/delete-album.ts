@@ -5,23 +5,23 @@ import { revalidatePath } from "next/cache";
 import { getServerSession } from "next-auth";
 import { AuthOptions } from "@/app/api/auth/[...nextauth]/options";
 
-export default async function deleteBand(id: string) {
+export default async function deleteAlbum(id: string) {
   const session = await getServerSession(AuthOptions);
 
   if (!session) {
     return {
-      errors: ["Not authenticated"],
+      error: "Not authenticated",
     };
   }
 
   try {
-    await prisma.band.delete({
+    await prisma.album.delete({
       where: { id: id },
     });
-    revalidatePath("/bands");
+    revalidatePath("/albums");
   } catch (error) {
     return {
-      error: "Deleting band failed",
+      error: "Deleting album failed",
     };
   }
 }

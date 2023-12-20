@@ -1,8 +1,8 @@
 export const dynamic = "force-dynamic";
 
 import { prisma } from "@/lib/db";
-import BandsTable from "@/components/bands/BandsTable";
-import CreateOrEditBand from "@/components/bands/CreateOrEditBand";
+import BandsTable from "@/app/bands/BandsTable";
+import CreateOrEditBand from "@/app/bands/CreateOrEditBand";
 import { Suspense } from "react";
 import Spinner from "@/components/ui/Spinner";
 

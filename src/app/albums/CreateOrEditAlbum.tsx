@@ -1,9 +1,9 @@
 import { prisma } from "@/lib/db";
-import CreateOrEditForm from "./CreateOrEditForm";
+import CreateOrEditAlbumForm from "./CreateOrEditAlbumForm";
 import { AuthOptions } from "@/app/api/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth/next";
 
-export default async function CreateOrEditBand() {
+export default async function CreateOrEditAlbum() {
   const session = await getServerSession(AuthOptions);
 
   if (!session) {
@@ -16,6 +16,7 @@ export default async function CreateOrEditBand() {
       name: "asc",
     },
   });
+  const bands = await prisma.band.findMany({});
 
-  return <CreateOrEditForm ratings={ratings} genres={genres} />;
+  return <CreateOrEditAlbumForm ratings={ratings} genres={genres} bands={bands} />;
 }

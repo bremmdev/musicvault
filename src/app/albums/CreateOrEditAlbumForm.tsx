@@ -10,36 +10,47 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Rating, Genre } from "@prisma/client";
-import createBand from "@/_actions/create-band";
+import { Rating, Genre, Band } from "@prisma/client";
+import createAlbum from "@/_actions/albums/create-album";
 import MultiSelect from "react-select";
-import { createBandSchema, updateBandSchema } from "@/lib/schema";
-import FormActions from "./FormActions";
-import updateBand from "@/_actions/update-band";
-import useBandStore from "@/store/bands";
-import { Button } from "../ui/button";
+import { createAlbumSchema, updateAlbumSchema } from "@/lib/schema";
+import AlbumFormActions from "./AlbumFormActions";
+import updateAlbum from "@/_actions/albums/update-album";
+import useAlbumStore from "@/store/albums";
+import { Button } from "../../components/ui/button";
 import { PlusCircle } from "lucide-react";
+import FormErrors from "@/components/ui/FormErrors";
+import { set } from "zod";
 
 type Props = {
   ratings: Array<Rating>;
   genres: Array<Genre>;
+  bands: Array<Band>;
 };
 
-const CreateOrEditForm = ({ ratings, genres }: Props) => {
-  const { showForm, setShowForm, selectedBand, setDeleteError } =
-    useBandStore();
+const CreateOrEditAlbumForm = ({ ratings, genres, bands }: Props) => {
+  const { showForm, setShowForm, selectedAlbum, setDeleteError } =
+    useAlbumStore();
 
   const formRef = React.useRef<HTMLFormElement>(null);
-  const [formErrors, setFormErrors] = React.useState<Array<string>>([]);
+  const [formErrors, setFormErrors] = React.useState<Array<string> | string>(
+    []
+  );
 
   useEffect(() => {
-    if (selectedBand) {
+    if (selectedAlbum) {
       (formRef.current as HTMLFormElement).scrollIntoView({
         behavior: "smooth",
         block: "center",
       });
     }
-  }, [selectedBand]);
+  }, [selectedAlbum]);
+
+  useEffect(() => {
+    if (showForm) {
+      setFormErrors([]);
+    }
+  }, [showForm]);
 
   async function clientAction(formData: FormData) {
     setFormErrors([]);
@@ -48,22 +59,19 @@ const CreateOrEditForm = ({ ratings, genres }: Props) => {
     const input = {
       ...rawData,
       id: rawData.id || null,
-      disbandedIn: rawData.disbandedIn || null,
-      lastChecked: rawData.lastChecked
-        ? new Date(rawData.lastChecked as string)
-        : null,
       genres: formData.getAll("genres"),
+      imageUrl: null,
     };
 
     //schema and actionFunction are different depending on whether we're creating or updating
-    const schema = input.id ? updateBandSchema : createBandSchema;
-    const actionFunction = input.id ? updateBand : createBand;
+    const schema = input.id ? updateAlbumSchema : createAlbumSchema;
+    const actionFunction = input.id ? updateAlbum : createAlbum;
 
     const parsed = schema.safeParse(input);
     if (parsed.success) {
       const res = await actionFunction(parsed.data);
-      if (res?.errors) {
-        setFormErrors(res.errors);
+      if (res?.error) {
+        setFormErrors(res.error);
         return;
       }
       setFormErrors([]);
@@ -82,6 +90,7 @@ const CreateOrEditForm = ({ ratings, genres }: Props) => {
   const handleClick = () => {
     setDeleteError(null);
     setShowForm(true);
+    setFormErrors([]);
   };
 
   return showForm ? (
@@ -89,23 +98,23 @@ const CreateOrEditForm = ({ ratings, genres }: Props) => {
       <form
         action={clientAction}
         className="flex flex-col gap-4 bg-slate-50 p-8 rounded-md max-w-5xl w-full mx-auto"
-        key={selectedBand?.id}
+        key={selectedAlbum?.id}
         ref={formRef}
       >
         {
           <h2 className="text-xl font-light mb-2 text-center">
-            {selectedBand ? `Update ${selectedBand.name}` : "Add new band"}
+            {selectedAlbum ? `Update ${selectedAlbum.title}` : "Add new album"}
           </h2>
         }
         <div className="flex flex-col md:flex-row gap-2">
           <input
             type="hidden"
             name="id"
-            defaultValue={selectedBand?.id || ""}
+            defaultValue={selectedAlbum?.id || ""}
           />
           <Select
             name="ratingId"
-            defaultValue={selectedBand?.ratingId || undefined}
+            defaultValue={selectedAlbum?.ratingId || undefined}
           >
             <SelectTrigger className="focus-visible:ring-offset-0 focus:ring-offset-0 md:max-w-[180px] hover:border-slate-400 data-[placeholder]:text-slate-400">
               <SelectValue placeholder="Select rating" />
@@ -122,45 +131,40 @@ const CreateOrEditForm = ({ ratings, genres }: Props) => {
           </Select>
           <Input
             className="focus-visible:ring-offset-0 hover:border-slate-400 placeholder:text-slate-400"
-            placeholder="name"
-            name="name"
-            defaultValue={selectedBand?.name || ""}
+            placeholder="title"
+            name="title"
+            defaultValue={selectedAlbum?.title || ""}
             type="text"
           />
-          <Input
-            className="focus-visible:ring-offset-0 hover:border-slate-400 placeholder:text-slate-400"
-            placeholder="country"
-            name="country"
-            defaultValue={selectedBand?.country || ""}
-            type="text"
-          />
-          <Input
-            className="md:max-w-[180px] focus-visible:ring-offset-0 hover:border-slate-400 placeholder:text-slate-400"
-            placeholder="formed in year"
-            name="formedIn"
-            defaultValue={selectedBand?.formedIn || ""}
-            type="text"
-          />
-          <Input
-            className="md:max-w-[180px] focus-visible:ring-offset-0 hover:border-slate-400 placeholder:text-slate-400"
-            placeholder="disbanded in year"
-            name="disbandedIn"
-            defaultValue={selectedBand?.disbandedIn || ""}
-            type="text"
-          />
+          <Select
+            name="bandId"
+            defaultValue={selectedAlbum?.bandId || undefined}
+          >
+            <SelectTrigger className="focus-visible:ring-offset-0 focus:ring-offset-0 hover:border-slate-400 data-[placeholder]:text-slate-400">
+              <SelectValue placeholder="Select band" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {bands.map((band) => (
+                  <SelectItem key={band.id} value={band.id}>
+                    {band.name}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
           <Input
             className="md:max-w-[180px] focus-visible:ring-offset-0 hover:border-slate-400 placeholder:text-slate-400"
-            name="lastChecked"
-            defaultValue={
-              selectedBand?.lastChecked?.toISOString().split("T")[0] || ""
-            }
-            type="date"
+            placeholder="year"
+            name="yearReleased"
+            defaultValue={selectedAlbum?.yearReleased || ""}
+            type="text"
           />
         </div>
         <div className="-mt-2">
           <MultiSelect
             defaultValue={
-              selectedBand?.genres.map((genre) => ({
+              selectedAlbum?.genres.map((genre) => ({
                 value: genre.id,
                 label: genre.name,
               })) || []
@@ -195,23 +199,16 @@ const CreateOrEditForm = ({ ratings, genres }: Props) => {
           />
         </div>
         {formErrors.length > 0 && (
-          <div className="flex flex-col gap-2 text-sm text-rose-600 font-medium">
-            <div>Saving band failed:</div>
-            <ul className="list-disc pl-4">
-              {formErrors.map((error, idx) => (
-                <li key={idx}>{error}</li>
-              ))}
-            </ul>
-          </div>
+          <FormErrors errors={formErrors} title="Saving album failed" />
         )}
-        <FormActions />
+        <AlbumFormActions />
       </form>
     </div>
   ) : (
     <Button className="flex gap-2 w-fit mx-auto my-8" onClick={handleClick}>
-      Add band <PlusCircle strokeWidth={2} size={20} />
+      Add album <PlusCircle strokeWidth={2} size={20} />
     </Button>
   );
 };
 
-export default CreateOrEditForm;
+export default CreateOrEditAlbumForm;

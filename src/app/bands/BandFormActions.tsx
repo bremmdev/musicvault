@@ -1,10 +1,10 @@
 import React from "react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { useFormStatus } from "react-dom";
 
 import useBandStore from "@/store/bands";
 
-const FormActions = () => {
+const BandFormActions = () => {
   const { pending } = useFormStatus();
 
   const { setShowForm, setSelectedBand, isDeleting } = useBandStore();
@@ -35,4 +35,4 @@ const FormActions = () => {
   );
 };
 
-export default FormActions;
+export default BandFormActions;
