@@ -3,6 +3,10 @@ import { NextAuthOptions } from "next-auth";
 import { prisma } from "@/lib/db";
 
 export const AuthOptions: NextAuthOptions = {
+  pages: {
+    signIn: "/login",
+    error: "/autherror", // Error code passed in query string as ?error=XXXX
+  },
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID as string,

@@ -24,7 +24,7 @@ const Navigation = () => {
   const authContent =
     authStatus === "loading" ? (
       <div className="w-[80px] h-10 items-center flex justify-center">
-        <Spinner width={20} />
+        <Spinner />
       </div>
     ) : (
       <>
