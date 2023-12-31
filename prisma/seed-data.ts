@@ -117,27 +117,12 @@ export const bands = [
     },
   },
   {
-    id: "clp75ju7j000008jobr4bchcw",
-    name: "Grey Daze",
-    country: "United States",
-    formedIn: "1993",
-    disbandedIn: null,
-    lastChecked: null,
-    ratingId: "clp70m990000108l89lv85ts1",
-    genres: {
-      connect: [
-        { id: "clp712bxa000208lce93p0euj" },
-        { id: "clp714h53000h08lc6psi5tld" },
-      ],
-    },
-  },
-  {
     id: "clp75m526000008jugz5yfhit",
     name: "Dead by Sunrise",
     country: "United States",
     formedIn: "2005",
     disbandedIn: "2012",
-    lastChecked: null,
+    lastChecked: new Date("2023-11-18"),
     ratingId: "clp70m990000108l89lv85ts1",
     genres: {
       connect: [
@@ -147,6 +132,37 @@ export const bands = [
       ],
     },
   },
+  {
+    id: "clqtfpoo4000008l8f8s60b8i",
+    name: "Disturbed",
+    country: "United States",
+    formedIn: "1994",
+    disbandedIn: null,
+    lastChecked: new Date("2023-12-27"),
+    ratingId: "clp70m990000108l89lv85ts1",
+    genres: {
+      connect: [
+        { id: "clp714a7e000g08lc1qqwbv2n" },
+        { id: "clp710y3l000108lc824k5bph" },
+        { id: "clp713sdw000c08lc71ei8tix" },
+      ],
+    },
+  },
+  {
+    id: "clp75ju7j000008jobr4bchcw",
+    name: "Grey Daze",
+    country: "United States",
+    formedIn: "1993",
+    disbandedIn: null,
+    lastChecked: new Date("2023-11-18"),
+    ratingId: "clp70m990000108l89lv85ts1",
+    genres: {
+      connect: [
+        { id: "clp712bxa000208lce93p0euj" },
+        { id: "clp714h53000h08lc6psi5tld" },
+      ],
+    },
+  }
 ];
 
 export const albums = [
@@ -193,6 +209,19 @@ export const albums = [
       ],
     },
   },
+  {
+    id: "clqtfv9j0000108l80jzy425g",
+    title: "Believe",
+    yearReleased: "2002",
+    ratingId: "clp70m990000108l89lv85ts1",
+    bandId: "clqtfpoo4000008l8f8s60b8i",
+    genres: {
+      connect: [
+        { id: "clp714a7e000g08lc1qqwbv2n" },
+        { id: "clp710y3l000108lc824k5bph" },
+      ],
+    },
+  }
 ];
 
 export const users = [

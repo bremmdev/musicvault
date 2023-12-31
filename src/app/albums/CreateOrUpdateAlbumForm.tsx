@@ -28,7 +28,7 @@ type Props = {
   bands: Array<Band>;
 };
 
-const CreateOrEditAlbumForm = ({ ratings, genres, bands }: Props) => {
+const CreateOrUpdateAlbumForm = ({ ratings, genres, bands }: Props) => {
   const { showForm, setShowForm, selectedAlbum, setDeleteError } =
     useAlbumStore();
 
@@ -211,4 +211,4 @@ const CreateOrEditAlbumForm = ({ ratings, genres, bands }: Props) => {
   );
 };
 
-export default CreateOrEditAlbumForm;
+export default CreateOrUpdateAlbumForm;

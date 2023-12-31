@@ -26,7 +26,7 @@ type Props = {
   genres: Array<Genre>;
 };
 
-const CreateOrEditForm = ({ ratings, genres }: Props) => {
+const CreateOrUpdateForm = ({ ratings, genres }: Props) => {
   const { showForm, setShowForm, selectedBand, setDeleteError } =
     useBandStore();
 
@@ -215,4 +215,4 @@ const CreateOrEditForm = ({ ratings, genres }: Props) => {
   );
 };
 
-export default CreateOrEditForm;
+export default CreateOrUpdateForm;

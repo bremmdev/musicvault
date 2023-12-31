@@ -70,7 +70,7 @@ const AlbumsTable = ({ albums }: Props) => {
     setIsDeleting(false);
   }
 
-  const handleEditClick = (album: AlbumWithDetails) => {
+  const handleUpdateClick = (album: AlbumWithDetails) => {
     setSelectedAlbum(album);
     setShowForm(true);
     setDeleteError(null);
@@ -126,7 +126,7 @@ const AlbumsTable = ({ albums }: Props) => {
                       <span className="flex gap-2">
                         <button disabled={isDeleting}>
                           <Pencil
-                            onClick={handleEditClick.bind(null, album)}
+                            onClick={handleUpdateClick.bind(null, album)}
                             className="cursor-pointer w-5 h-5 stroke-slate-700 hover:stroke-black transition-all"
                             strokeWidth={1}
                           />

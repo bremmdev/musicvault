@@ -68,7 +68,7 @@ const BandsTable = ({ bands }: Props) => {
     setIsDeleting(false);
   }
 
-  const handleEditClick = (band: BandWithDetails) => {
+  const handleUpdateClick = (band: BandWithDetails) => {
     setSelectedBand(band);
     setShowForm(true);
     setDeleteError(null);
@@ -131,7 +131,7 @@ const BandsTable = ({ bands }: Props) => {
                       <span className="flex gap-2">
                         <button disabled={isDeleting}>
                           <Pencil
-                            onClick={handleEditClick.bind(null, band)}
+                            onClick={handleUpdateClick.bind(null, band)}
                             className="cursor-pointer w-5 h-5 stroke-slate-700 hover:stroke-black transition-all"
                             strokeWidth={1}
                           />
