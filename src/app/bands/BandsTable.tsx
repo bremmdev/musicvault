@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
 import deleteBand from "@/_actions/bands/delete-band";
 import DeleteButton from "../../components/ui/DeleteButton";
 import { useSession } from "next-auth/react";
-import useBandStore from "@/store/bands";
+import { useBandStore } from "@/store/store";
 
 type Props = {
   bands: Array<BandWithDetails>;
@@ -30,6 +30,7 @@ const BandsTable = ({ bands }: Props) => {
     setSelectedBand,
     deleteError,
     setDeleteError,
+    tableHeaders,
   } = useBandStore();
 
   //optimistic updates for delete
@@ -79,12 +80,9 @@ const BandsTable = ({ bands }: Props) => {
       <Table className="text-xs md:text-sm">
         <TableHeader>
           <TableRow className="[&>th]:text-center">
-            <TableHead>Rating</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Country</TableHead>
-            <TableHead>Years Active</TableHead>
-            <TableHead>Genres</TableHead>
-            <TableHead>Last Checked</TableHead>
+            {tableHeaders.map((tableHeader) => (
+              <TableHead key={tableHeader}>{tableHeader}</TableHead>
+            ))}
             <TableHead className="w-12"></TableHead>
           </TableRow>
         </TableHeader>

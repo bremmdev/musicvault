@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
 import deleteAlbum from "@/_actions/albums/delete-album";
 import DeleteButton from "@/components/ui/DeleteButton";
 import { useSession } from "next-auth/react";
-import useAlbumStore from "@/store/albums";
+import { useAlbumStore } from "@/store/store";
 
 type Props = {
   albums: Array<AlbumWithDetails>;
@@ -30,6 +30,7 @@ const AlbumsTable = ({ albums }: Props) => {
     setSelectedAlbum,
     deleteError,
     setDeleteError,
+    tableHeaders
   } = useAlbumStore();
 
   //optimistic updates for delete
@@ -81,12 +82,7 @@ const AlbumsTable = ({ albums }: Props) => {
       <Table className="text-xs md:text-sm">
         <TableHeader>
           <TableRow className="[&>th]:text-center">
-            <TableHead>Rating</TableHead>
-            <TableHead>Title</TableHead>
-            <TableHead>Band</TableHead>
-            <TableHead>Country</TableHead>
-            <TableHead>Year</TableHead>
-            <TableHead>Genres</TableHead>
+            {tableHeaders.map(tableHeader => <TableHead key={tableHeader}>{tableHeader}</TableHead>)} 
             <TableHead className="w-12"></TableHead>
           </TableRow>
         </TableHeader>

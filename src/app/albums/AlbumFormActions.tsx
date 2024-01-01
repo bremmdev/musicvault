@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { useFormStatus } from "react-dom";
 
-import useAlbumStore from "@/store/albums";
+import { useAlbumStore } from "@/store/store";
 
 const AlbumFormActions = () => {
   const { pending } = useFormStatus();

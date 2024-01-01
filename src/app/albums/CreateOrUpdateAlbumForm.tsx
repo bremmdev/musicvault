@@ -16,7 +16,7 @@ import MultiSelect from "react-select";
 import { createAlbumSchema, updateAlbumSchema } from "@/lib/schema";
 import AlbumFormActions from "./AlbumFormActions";
 import updateAlbum from "@/_actions/albums/update-album";
-import useAlbumStore from "@/store/albums";
+import { useAlbumStore } from "@/store/store";
 import { Button } from "../../components/ui/button";
 import { PlusCircle } from "lucide-react";
 import FormErrors from "@/components/ui/FormErrors";

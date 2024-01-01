@@ -16,7 +16,7 @@ import MultiSelect from "react-select";
 import { createBandSchema, updateBandSchema } from "@/lib/schema";
 import BandFormActions from "./BandFormActions";
 import updateBand from "@/_actions/bands/update-band";
-import useBandStore from "@/store/bands";
+import { useBandStore } from "@/store/store";
 import { Button } from "../../components/ui/button";
 import { PlusCircle } from "lucide-react";
 import FormErrors from "@/components/ui/FormErrors";
