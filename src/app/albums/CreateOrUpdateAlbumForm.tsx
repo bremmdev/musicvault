@@ -121,11 +121,13 @@ const CreateOrUpdateAlbumForm = ({ ratings, genres, bands }: Props) => {
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                {ratings.map((rating) => (
-                  <SelectItem key={rating.id} value={rating.id}>
-                    {rating.value}
-                  </SelectItem>
-                ))}
+                {ratings
+                  .filter((rating) => rating.value !== "average")
+                  .map((rating) => (
+                    <SelectItem key={rating.id} value={rating.id}>
+                      {rating.value}
+                    </SelectItem>
+                  ))}
               </SelectGroup>
             </SelectContent>
           </Select>

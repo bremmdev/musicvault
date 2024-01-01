@@ -10,12 +10,13 @@ import {
   TableCell,
 } from "../../components/ui/table";
 import { BandWithDetails } from "@/types/types";
-import { Star, Pencil } from "lucide-react";
-import { cn } from "@/lib/utils";
 import deleteBand from "@/_actions/bands/delete-band";
-import DeleteButton from "../../components/ui/DeleteButton";
 import { useSession } from "next-auth/react";
 import { useBandStore } from "@/store/store";
+import Rating from "@/components/ui/Rating";
+import StyledTableRow from "@/components/table/StyledTableRow";
+import TableActions from "@/components/table/TableActions";
+import TableError from "@/components/table/TableError";
 
 type Props = {
   bands: Array<BandWithDetails>;
@@ -69,7 +70,7 @@ const BandsTable = ({ bands }: Props) => {
     setIsDeleting(false);
   }
 
-  const handleUpdateClick = (band: BandWithDetails) => {
+  const handleUpdate = (band: BandWithDetails) => {
     setSelectedBand(band);
     setShowForm(true);
     setDeleteError(null);
@@ -98,61 +99,30 @@ const BandsTable = ({ bands }: Props) => {
               : "-";
 
             return (
-              <React.Fragment key={band.name}>
-                <TableRow
-                  className={cn(
-                    {
-                      "border-none hover:bg-transparent": hasDeleteError,
-                      "font-medium bg-amber-50":
-                        band.rating.value === "excellent",
-                    },
-                    "[&>td]:text-center"
-                  )}
+              <React.Fragment key={band.id}>
+                <StyledTableRow
+                  hasDeleteError={hasDeleteError}
+                  rating={band.rating.value}
                 >
                   <TableCell className="w-12">
-                    <Star
-                      stroke="none"
-                      className={cn("mx-auto", {
-                        "fill-amber-300": band.rating.value === "excellent",
-                        "fill-slate-300": band.rating.value === "good",
-                        "fill-[#7F735F]": band.rating.value === "average",
-                      })}
-                    />
+                    <Rating rating={band.rating.value} />
                   </TableCell>
                   <TableCell>{band.name}</TableCell>
                   <TableCell>{band.country}</TableCell>
                   <TableCell>{yearsActive}</TableCell>
                   <TableCell>{genres}</TableCell>
                   <TableCell>{lastCheckText}</TableCell>
-                  <TableCell>
-                    {authStatus === "authenticated" ? (
-                      <span className="flex gap-2">
-                        <button disabled={isDeleting}>
-                          <Pencil
-                            onClick={handleUpdateClick.bind(null, band)}
-                            className="cursor-pointer w-5 h-5 stroke-slate-700 hover:stroke-black transition-all"
-                            strokeWidth={1}
-                          />
-                        </button>
-                        <DeleteButton
-                          onClick={() => handleDelete(band.id)}
-                          aria-label="delete band"
-                          disabled={isDeleting}
-                        ></DeleteButton>
-                      </span>
-                    ) : null}
-                  </TableCell>
-                </TableRow>
-                {hasDeleteError && (
-                  <TableRow className="hover:bg-transparent">
-                    <TableCell
-                      colSpan={7}
-                      className="text-sm text-center w-full pt-0 text-rose-600 font-medium"
-                    >
-                      {deleteError.message}
-                    </TableCell>
-                  </TableRow>
-                )}
+                  {authStatus === "authenticated" ? (
+                    <TableActions
+                      isDeleting={isDeleting}
+                      onUpdate={handleUpdate.bind(null, band)}
+                      onDelete={() => handleDelete(band.id)}
+                    />
+                  ) : (
+                    <TableCell></TableCell>
+                  )}
+                </StyledTableRow>
+                {hasDeleteError && <TableError error={deleteError.message} />}
               </React.Fragment>
             );
           })}

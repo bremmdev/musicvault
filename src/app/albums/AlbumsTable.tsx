@@ -10,12 +10,13 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { AlbumWithDetails } from "@/types/types";
-import { Star, Pencil } from "lucide-react";
-import { cn } from "@/lib/utils";
 import deleteAlbum from "@/_actions/albums/delete-album";
-import DeleteButton from "@/components/ui/DeleteButton";
 import { useSession } from "next-auth/react";
 import { useAlbumStore } from "@/store/store";
+import Rating from "@/components/ui/Rating";
+import StyledTableRow from "@/components/table/StyledTableRow";
+import TableActions from "@/components/table/TableActions";
+import TableError from "@/components/table/TableError";
 
 type Props = {
   albums: Array<AlbumWithDetails>;
@@ -30,7 +31,7 @@ const AlbumsTable = ({ albums }: Props) => {
     setSelectedAlbum,
     deleteError,
     setDeleteError,
-    tableHeaders
+    tableHeaders,
   } = useAlbumStore();
 
   //optimistic updates for delete
@@ -71,7 +72,7 @@ const AlbumsTable = ({ albums }: Props) => {
     setIsDeleting(false);
   }
 
-  const handleUpdateClick = (album: AlbumWithDetails) => {
+  const handleUpdate = (album: AlbumWithDetails) => {
     setSelectedAlbum(album);
     setShowForm(true);
     setDeleteError(null);
@@ -82,7 +83,9 @@ const AlbumsTable = ({ albums }: Props) => {
       <Table className="text-xs md:text-sm">
         <TableHeader>
           <TableRow className="[&>th]:text-center">
-            {tableHeaders.map(tableHeader => <TableHead key={tableHeader}>{tableHeader}</TableHead>)} 
+            {tableHeaders.map((tableHeader) => (
+              <TableHead key={tableHeader}>{tableHeader}</TableHead>
+            ))}
             <TableHead className="w-12"></TableHead>
           </TableRow>
         </TableHeader>
@@ -93,59 +96,30 @@ const AlbumsTable = ({ albums }: Props) => {
 
             return (
               <React.Fragment key={album.id}>
-                <TableRow
-                  className={cn(
-                    {
-                      "border-none hover:bg-transparent": hasDeleteError,
-                      "font-medium bg-amber-50":
-                        album.rating.value === "excellent",
-                    },
-                    "[&>td]:text-center"
-                  )}
+                <StyledTableRow
+                  hasDeleteError={hasDeleteError}
+                  rating={album.rating.value}
                 >
                   <TableCell className="w-12">
-                    <Star
-                      stroke="none"
-                      className={cn("mx-auto", {
-                        "fill-amber-300": album.rating.value === "excellent",
-                        "fill-slate-300": album.rating.value === "good",
-                      })}
-                    />
+                    <Rating rating={album.rating.value} />
                   </TableCell>
                   <TableCell>{album.title}</TableCell>
                   <TableCell>{album.band.name}</TableCell>
                   <TableCell>{album.band.country}</TableCell>
                   <TableCell>{album.yearReleased}</TableCell>
                   <TableCell>{genres}</TableCell>
-                  <TableCell>
-                    {authStatus === "authenticated" ? (
-                      <span className="flex gap-2">
-                        <button disabled={isDeleting}>
-                          <Pencil
-                            onClick={handleUpdateClick.bind(null, album)}
-                            className="cursor-pointer w-5 h-5 stroke-slate-700 hover:stroke-black transition-all"
-                            strokeWidth={1}
-                          />
-                        </button>
-                        <DeleteButton
-                          onClick={() => handleDelete(album.id)}
-                          aria-label="delete band"
-                          disabled={isDeleting}
-                        ></DeleteButton>
-                      </span>
-                    ) : null}
-                  </TableCell>
-                </TableRow>
-                {hasDeleteError && (
-                  <TableRow className="hover:bg-transparent">
-                    <TableCell
-                      colSpan={7}
-                      className="text-sm text-center w-full pt-0 text-rose-600 font-medium"
-                    >
-                      {deleteError.message}
-                    </TableCell>
-                  </TableRow>
-                )}
+
+                  {authStatus === "authenticated" ? (
+                    <TableActions
+                      isDeleting={isDeleting}
+                      onUpdate={handleUpdate.bind(null, album)}
+                      onDelete={() => handleDelete(album.id)}
+                    />
+                  ) : (
+                    <TableCell></TableCell>
+                  )}
+                </StyledTableRow>
+                {hasDeleteError && <TableError error={deleteError.message} />}
               </React.Fragment>
             );
           })}
