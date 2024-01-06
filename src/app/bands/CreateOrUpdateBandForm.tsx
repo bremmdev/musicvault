@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/select";
 import { Rating, Genre } from "@prisma/client";
 import createBand from "@/_actions/bands/create-band";
-import MultiSelect from "react-select";
 import { createBandSchema, updateBandSchema } from "@/lib/schema";
 import BandFormActions from "./BandFormActions";
 import updateBand from "@/_actions/bands/update-band";
@@ -20,6 +19,8 @@ import { useBandStore } from "@/store/store";
 import { Button } from "../../components/ui/button";
 import { PlusCircle } from "lucide-react";
 import FormErrors from "@/components/ui/FormErrors";
+import MultiSelectInput from "@/components/table/MultiSelectInput";
+import useForm from "@/hooks/useForm";
 
 type Props = {
   ratings: Array<Rating>;
@@ -30,23 +31,10 @@ const CreateOrUpdateForm = ({ ratings, genres }: Props) => {
   const { showForm, setShowForm, selectedBand, setDeleteError } =
     useBandStore();
 
-  const formRef = React.useRef<HTMLFormElement>(null);
-  const [formErrors, setFormErrors] = React.useState<Array<string> | string>([]);
-
-  useEffect(() => {
-    if (selectedBand) {
-      (formRef.current as HTMLFormElement).scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
-    }
-  }, [selectedBand]);
-
-  useEffect(() => {
-    if (showForm) {
-      setFormErrors([]);
-    }
-  }, [showForm]);
+  const { formRef, formErrors, setFormErrors } = useForm({
+    selectedItem: selectedBand,
+    showForm,
+  });
 
   async function clientAction(formData: FormData) {
     setFormErrors([]);
@@ -166,38 +154,14 @@ const CreateOrUpdateForm = ({ ratings, genres }: Props) => {
           />
         </div>
         <div className="-mt-2">
-          <MultiSelect
+          <MultiSelectInput
             defaultValue={
               selectedBand?.genres.map((genre) => ({
                 value: genre.id,
                 label: genre.name,
               })) || []
             }
-            styles={{
-              control: (baseStyles, state) => ({
-                ...baseStyles,
-                borderColor: state.isFocused ? "#e2e8f0" : "#e2e8f0",
-                borderRadius: "0.375rem",
-                fontSize: "14px",
-                outline: state.isFocused ? "2px solid #020617" : "none",
-                boxShadow: "none",
-                "&:hover": {
-                  borderColor: "#94a3b8",
-                },
-              }),
-              option: (baseStyles, state) => ({
-                ...baseStyles,
-                fontSize: "14px",
-                backgroundColor: state.isFocused ? "#f1f5f9" : "#fff",
-              }),
-              placeholder: (baseStyles) => ({
-                ...baseStyles,
-                color: "#94a3b8",
-              }),
-            }}
             options={genreOptions}
-            isMulti={true}
-            className="text-slate-950 shrink-0 w-full block"
             placeholder="Genres"
             name="genres"
           />
