@@ -17,6 +17,7 @@ import Rating from "@/components/ui/Rating";
 import StyledTableRow from "@/components/table/StyledTableRow";
 import TableActions from "@/components/table/TableActions";
 import TableError from "@/components/table/TableError";
+import useOptimisticState from "@/hooks/useOptimisticState";
 
 type Props = {
   albums: Array<AlbumWithDetails>;
@@ -34,20 +35,10 @@ const AlbumsTable = ({ albums }: Props) => {
     tableHeaders,
   } = useAlbumStore();
 
-  //optimistic updates for delete
-  const [optimisticAlbums, setOptimisticAlbums] = React.useOptimistic(
-    albums,
-    (state, newAlbums: Array<AlbumWithDetails>) => newAlbums
-  );
-
   const { data: session, status: authStatus } = useSession();
 
-  //reset optimistic albums when bands change
-  React.useEffect(() => {
-    React.startTransition(() => {
-      setOptimisticAlbums(albums);
-    });
-  }, [albums, setOptimisticAlbums]);
+  //optimistic updates for delete
+  const [optimisticAlbums, setOptimisticAlbums] = useOptimisticState(albums);
 
   async function handleDelete(id: string) {
     setDeleteError(null);

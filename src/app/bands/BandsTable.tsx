@@ -17,6 +17,7 @@ import Rating from "@/components/ui/Rating";
 import StyledTableRow from "@/components/table/StyledTableRow";
 import TableActions from "@/components/table/TableActions";
 import TableError from "@/components/table/TableError";
+import useOptimisticState from "@/hooks/useOptimisticState";
 
 type Props = {
   bands: Array<BandWithDetails>;
@@ -34,20 +35,10 @@ const BandsTable = ({ bands }: Props) => {
     tableHeaders,
   } = useBandStore();
 
-  //optimistic updates for delete
-  const [optimisticBands, setOptimisticBands] = React.useOptimistic(
-    bands,
-    (state, newBands: Array<BandWithDetails>) => newBands
-  );
-
   const { data: session, status: authStatus } = useSession();
 
-  //reset optimistic bands when bands change
-  React.useEffect(() => {
-    React.startTransition(() => {
-      setOptimisticBands(bands);
-    });
-  }, [bands, setOptimisticBands]);
+  //optimistic updates for delete
+  const [optimisticBands, setOptimisticBands] = useOptimisticState(bands);
 
   async function handleDelete(id: string) {
     setDeleteError(null);
