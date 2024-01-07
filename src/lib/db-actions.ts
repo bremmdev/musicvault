@@ -35,6 +35,34 @@ export const getAlbumsWithDetails = cache(async () => {
   });
 });
 
+export const getSongsWithDetails = cache(async () => {
+  return await prisma.song.findMany({
+    include: {
+      genres: true,
+      rating: true,
+      album: {
+        include: {
+          band: true,
+        },
+      },
+    },
+    orderBy: [
+      {
+        album: {
+          band: {
+            name: "asc",
+          },
+        },
+      },
+      {
+        album: {
+          yearReleased: "asc",
+        },
+      },
+    ],
+  });
+});
+
 export const getBands = cache(async () => {
   return await prisma.band.findMany({
     orderBy: {

@@ -5,11 +5,11 @@ export const ratings = [
   },
   {
     id: "clp70m990000108l89lv85ts1",
-    value: "good",
+    value: "great",
   },
   {
     id: "clp70msd8000208l8dogkbq1g",
-    value: "average",
+    value: "good",
   },
 ];
 
@@ -162,7 +162,7 @@ export const bands = [
         { id: "clp714h53000h08lc6psi5tld" },
       ],
     },
-  }
+  },
 ];
 
 export const albums = [
@@ -197,6 +197,16 @@ export const albums = [
     },
   },
   {
+    id: "clr3dzw61000208lcex1eau9i",
+    title: "I Loved You At Your Darkest",
+    yearReleased: "2018",
+    ratingId: "clp70msd8000208l8dogkbq1g",
+    bandId: "clp71epc8000t08lc6a1v11l9",
+    genres: {
+      connect: [{ id: "clp7133qr000508lc0g2u6e75" }],
+    },
+  },
+  {
     id: "clqe36a5b000708lf3vhjb5wq",
     title: "No Sun Today",
     yearReleased: "1997",
@@ -221,7 +231,149 @@ export const albums = [
         { id: "clp710y3l000108lc824k5bph" },
       ],
     },
-  }
+  },
+  {
+    id: "clr3e7xtq000608lcgmzz6sev",
+    title: "Out of Ashes",
+    yearReleased: "2009",
+    ratingId: "clp70msd8000208l8dogkbq1g",
+    bandId: "clp75m526000008jugz5yfhit",
+    genres: {
+      connect: [
+        { id: "clp712bxa000208lce93p0euj" },
+        { id: "clp713ljl000a08lc8bzhehr4" },
+        { id: "clp714h53000h08lc6psi5tld" },
+      ],
+    },
+  },
+];
+
+const BehemothSongs = [
+  {
+    id: "clr3cd44j000008kz7nz1acmw",
+    title: "Conquer All",
+    yearReleased: "2004",
+    ratingId: "clp70ltoz000008l89kdnduo0",
+    bandId: "clp71epc8000t08lc6a1v11l9",
+    albumId: "clq8ig10t000108l9c35i4h75",
+    genres: {
+      connect: [{ id: "clp7133qr000508lc0g2u6e75" }],
+    },
+  },
+  {
+    id: "clr3cg2td000108kz1ydneoop",
+    title: "Sculpting the Throne ov Seth",
+    yearReleased: "2004",
+    ratingId: "clp70m990000108l89lv85ts1",
+    bandId: "clp71epc8000t08lc6a1v11l9",
+    albumId: "clq8ig10t000108l9c35i4h75",
+    genres: {
+      connect: [{ id: "clp7133qr000508lc0g2u6e75" }],
+    },
+  },
+  {
+    id: "clr3cm7az000208kz0n2ygxus",
+    title: "At the Left Hand ov God",
+    yearReleased: "2007",
+    ratingId: "clp70ltoz000008l89kdnduo0",
+    bandId: "clp71epc8000t08lc6a1v11l9",
+    albumId: "clq8ig8ko000208l95h3t2c82",
+    genres: {
+      connect: [{ id: "clp7133qr000508lc0g2u6e75" }],
+    },
+  },
+  {
+    id: "clr3cn9ey000308kz72ukal17",
+    title: "Prometherion",
+    yearReleased: "2007",
+    ratingId: "clp70m990000108l89lv85ts1",
+    bandId: "clp71epc8000t08lc6a1v11l9",
+    albumId: "clq8ig8ko000208l95h3t2c82",
+    genres: {
+      connect: [{ id: "clp7133qr000508lc0g2u6e75" }],
+    },
+  },
+  {
+    id: "clr3coimm000408kz8bwo51fz",
+    title: "Slaying the Prophets ov Isa",
+    yearReleased: "2007",
+    ratingId: "clp70m990000108l89lv85ts1",
+    bandId: "clp71epc8000t08lc6a1v11l9",
+    albumId: "clq8ig8ko000208l95h3t2c82",
+    genres: {
+      connect: [{ id: "clp7133qr000508lc0g2u6e75" }],
+    },
+  },
+  {
+    id: "clr3cpm2w000508kzfif4ezf1",
+    title: "Ora Pro Nobis Lucifer",
+    yearReleased: "2014",
+    ratingId: "clp70ltoz000008l89kdnduo0",
+    bandId: "clp71epc8000t08lc6a1v11l9",
+    albumId: "clq8ia7zq000008l965ci2ec8",
+    genres: {
+      connect: [{ id: "clp7133qr000508lc0g2u6e75" }],
+    },
+  },
+  {
+    id: "clr3cqej2000608kzahftamw4",
+    title: "O Father O Satan O Sun!",
+    yearReleased: "2014",
+    ratingId: "clp70ltoz000008l89kdnduo0",
+    bandId: "clp71epc8000t08lc6a1v11l9",
+    albumId: "clq8ia7zq000008l965ci2ec8",
+    genres: {
+      connect: [{ id: "clp7133qr000508lc0g2u6e75" }],
+    },
+  },
+  {
+    id: "clr3cr99i000708kzgxh9eeoy",
+    title: "The Satanist",
+    yearReleased: "2014",
+    ratingId: "clp70ltoz000008l89kdnduo0",
+    bandId: "clp71epc8000t08lc6a1v11l9",
+    albumId: "clq8ia7zq000008l965ci2ec8",
+    genres: {
+      connect: [{ id: "clp7133qr000508lc0g2u6e75" }],
+    },
+  },
+  {
+    id: "clr3crlpt000808kzf5k1966p",
+    title: "Blow Your Trumpets Gabriel",
+    yearReleased: "2014",
+    ratingId: "clp70m990000108l89lv85ts1",
+    bandId: "clp71epc8000t08lc6a1v11l9",
+    albumId: "clq8ia7zq000008l965ci2ec8",
+    genres: {
+      connect: [{ id: "clp7133qr000508lc0g2u6e75" }],
+    },
+  },
+  {
+    id: "clr3e12ly000308lcbmk7515p",
+    title: "Bartzabel",
+    yearReleased: "2018",
+    ratingId: "clp70m990000108l89lv85ts1",
+    bandId: "clp71epc8000t08lc6a1v11l9",
+    albumId: "clr3dzw61000208lcex1eau9i",
+    genres: {
+      connect: [{ id: "clp7133qr000508lc0g2u6e75" }],
+    },
+  },
+];
+
+export const songs = [
+  ...BehemothSongs,
+  {
+    id: "clr3e4b7c000408lcdcll0qgp",
+    title: "Let Down",
+    yearReleased: "2009",
+    ratingId: "clp70m990000108l89lv85ts1",
+    bandId: "clp75m526000008jugz5yfhit",
+    albumId: "clr3e7xtq000608lcgmzz6sev",
+    genres: {
+      connect: [{ id: "clp712bxa000208lce93p0euj" }],
+    },
+  },
 ];
 
 export const users = [

@@ -12,8 +12,8 @@ const Rating = ({ rating }: Props) => {
       stroke="none"
       className={cn("mx-auto", {
         "fill-amber-300": rating === "excellent",
-        "fill-slate-300": rating === "good",
-        "fill-[#7F735F]": rating === "average",
+        "fill-slate-300": rating === "great",
+        "fill-[#7F735F]": rating === "good",
       })}
     />
   );

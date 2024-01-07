@@ -1,12 +1,13 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
-import { genres, ratings, bands, albums, users } from "./seed-data";
+import { genres, ratings, bands, albums, songs, users } from "./seed-data";
 
 //clear db before seeding
 async function clearDatabase() {
   await prisma.$transaction([
     prisma.user.deleteMany(),
+    prisma.song.deleteMany(),
     prisma.album.deleteMany(),
     prisma.band.deleteMany(),
     prisma.rating.deleteMany(),
@@ -42,6 +43,11 @@ function createAlbums() {
   return albums.map((album) => prisma.album.create({ data: album }));
 }
 
+function createSongs() {
+  //can't use createMany because of the many-to-many relationship of genres
+  return songs.map((song) => prisma.song.create({ data: song }));
+}
+
 async function seed() {
   await clearDatabase();
   await createUsers();
@@ -49,6 +55,7 @@ async function seed() {
   await createGenres();
   await prisma.$transaction([...createBands()]);
   await prisma.$transaction([...createAlbums()]);
+  await prisma.$transaction([...createSongs()]);
 }
 
 seed();

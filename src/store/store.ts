@@ -1,7 +1,10 @@
 import { create } from "zustand";
 import { DeleteError } from "@/types/types";
-import { AlbumWithDetails } from "@/types/types";
-import { BandWithDetails } from "@/types/types";
+import {
+  BandWithDetails,
+  AlbumWithDetails,
+  SongWithDetails,
+} from "@/types/types";
 
 export type CommonStoreState = {
   showForm: boolean;
@@ -13,27 +16,10 @@ export type CommonStoreState = {
   tableHeaders: Array<string>;
 };
 
-type AlbumStoreState = CommonStoreState & {
-  selectedAlbum: AlbumWithDetails | null;
-  setSelectedAlbum: (selectedAlbum: AlbumWithDetails | null) => void;
-}
-
-const useAlbumStore = create<AlbumStoreState>((set) => ({
- showForm: false,
- isDeleting: false,
- selectedAlbum: null,
- deleteError: null,
- setShowForm: (showForm) => set({ showForm }),
- setIsDeleting: (isDeleting) => set({ isDeleting }),
- setSelectedAlbum: (selectedAlbum) => set({ selectedAlbum }),
- setDeleteError: (deleteError) => set({ deleteError }),
- tableHeaders: ["Rating", "Title", "Band", "Country", "Year", "Genres"],
-}));
-
 type BandStoreState = CommonStoreState & {
   selectedBand: BandWithDetails | null;
   setSelectedBand: (selectedBand: BandWithDetails | null) => void;
-}
+};
 
 const useBandStore = create<BandStoreState>((set) => ({
   showForm: false,
@@ -47,4 +33,38 @@ const useBandStore = create<BandStoreState>((set) => ({
   tableHeaders: ["Rating", "Name", "Country", "Years Active", "Genres", "Last Checked"],
 }));
 
-export { useAlbumStore, useBandStore };
+type AlbumStoreState = CommonStoreState & {
+  selectedAlbum: AlbumWithDetails | null;
+  setSelectedAlbum: (selectedAlbum: AlbumWithDetails | null) => void;
+};
+
+const useAlbumStore = create<AlbumStoreState>((set) => ({
+  showForm: false,
+  isDeleting: false,
+  selectedAlbum: null,
+  deleteError: null,
+  setShowForm: (showForm) => set({ showForm }),
+  setIsDeleting: (isDeleting) => set({ isDeleting }),
+  setSelectedAlbum: (selectedAlbum) => set({ selectedAlbum }),
+  setDeleteError: (deleteError) => set({ deleteError }),
+  tableHeaders: ["Rating", "Title", "Band", "Country", "Year", "Genres"],
+}));
+
+type SongStoreState = CommonStoreState & {
+  selectedSong: SongWithDetails | null;
+  setSelectedSong: (selectedSong: SongWithDetails | null) => void;
+};
+
+const useSongStore = create<SongStoreState>((set) => ({
+  showForm: false,
+  isDeleting: false,
+  selectedSong: null,
+  deleteError: null,
+  setShowForm: (showForm) => set({ showForm }),
+  setIsDeleting: (isDeleting) => set({ isDeleting }),
+  setSelectedSong: (selectedSong) => set({ selectedSong }),
+  setDeleteError: (deleteError) => set({ deleteError }),
+  tableHeaders: ["Rating", "Title", "Band", "Album", "Year", "Genres"],
+}));
+
+export { useBandStore, useAlbumStore, useSongStore };

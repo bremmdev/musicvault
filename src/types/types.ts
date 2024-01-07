@@ -17,6 +17,18 @@ export type AlbumWithDetails = Prisma.AlbumGetPayload<{
   };
 }>;
 
+export type SongWithDetails = Prisma.SongGetPayload<{
+  include: {
+    genres: true;
+    rating: true;
+    album: {
+      include: {
+        band: true;
+      };
+    };
+  };
+}>;
+
 export type DeleteError = {
   message: string;
   id: string;

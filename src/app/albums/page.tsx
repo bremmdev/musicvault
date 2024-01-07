@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import React from "react";
 import AlbumsTable from "./AlbumsTable";
 import CreateOrUpdateAlbum from "./CreateOrUpdateAlbum";
