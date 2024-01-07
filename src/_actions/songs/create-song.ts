@@ -2,13 +2,13 @@
 
 import { prisma } from "@/lib/db";
 import { Prisma } from "@prisma/client";
-import { updateAlbumSchema } from "@/lib/schema";
+import { createSongSchema } from "@/lib/schema";
 import { revalidatePath } from "next/cache";
 import { getServerSession } from "next-auth";
 import { AuthOptions } from "@/app/api/auth/[...nextauth]/options";
 
-export default async function updateAlbum(data: unknown) {
-  const parsed = updateAlbumSchema.safeParse(data);
+export default async function createSong(data: unknown) {
+  const parsed = createSongSchema.safeParse(data);
   const session = await getServerSession(AuthOptions);
 
   if (!session) {
@@ -25,7 +25,7 @@ export default async function updateAlbum(data: unknown) {
   }
 
   //get the genre ids from the formData and connect them to the band
-  const updateData = {
+  const createData = {
     ...parsed.data,
     genres: {
       connect: parsed.data.genres.map((id) => ({ id: id })),
@@ -33,20 +33,19 @@ export default async function updateAlbum(data: unknown) {
   };
 
   try {
-    await prisma.album.update({
-      where: { id: parsed.data.id },
-      data: updateData,
+    await prisma.song.create({
+      data: createData,
     });
-    revalidatePath("/albums");
+    revalidatePath("/songs");
   } catch (error) {
     let message = "Server error";
 
-    //unique constraint of [title, bandId] failed
+    //unique constraint of title, bandId] failed
     if (
       error instanceof Prisma.PrismaClientKnownRequestError &&
       error.code === "P2002"
     ) {
-      message = "Album already exists";
+      message = "Song already exists";
     }
 
     return {

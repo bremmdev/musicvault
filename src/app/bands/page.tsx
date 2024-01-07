@@ -11,7 +11,7 @@ export default async function BandsPage() {
 
   return (
     <>
-      <h1 className="text-3xl font-extralight text-center mt-12 mb-6">Bands</h1>
+      <h1 className="text-3xl font-extralight text-center mt-8 mb-4">Bands</h1>
       <BandsTable bands={bands} />
       <Suspense fallback={<Spinner />}>
         <CreateOrUpdateBand />

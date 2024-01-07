@@ -44,3 +44,20 @@ export const updateAlbumSchema = createAlbumSchema.extend({
   id: z.string(),
 });
 
+export const createSongSchema = z.object({
+  title: z
+    .string()
+    .min(2, { message: "Title must be at least 2 characters long" }),
+  yearReleased: z
+    .string()
+    .regex(/^\d{4}$/, { message: "Year released must be a valid year" }),
+  bandId: z.string().min(1, { message: "Band must be selected" }),
+  albumId: z.string().min(1, { message: "Album must be selected" }),
+  genres: z.array(z.string().min(1, { message: "Genre must be selected" })),
+  ratingId: z.string().min(1, { message: "Rating must be selected" }),
+});
+
+export const updateSongSchema = createSongSchema.extend({
+  id: z.string(),
+});
+

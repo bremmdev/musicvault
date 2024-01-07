@@ -2,13 +2,13 @@
 
 import { prisma } from "@/lib/db";
 import { Prisma } from "@prisma/client";
-import { updateAlbumSchema } from "@/lib/schema";
+import { updateSongSchema } from "@/lib/schema";
 import { revalidatePath } from "next/cache";
 import { getServerSession } from "next-auth";
 import { AuthOptions } from "@/app/api/auth/[...nextauth]/options";
 
-export default async function updateAlbum(data: unknown) {
-  const parsed = updateAlbumSchema.safeParse(data);
+export default async function updateSong(data: unknown) {
+  const parsed = updateSongSchema.safeParse(data);
   const session = await getServerSession(AuthOptions);
 
   if (!session) {
@@ -33,11 +33,11 @@ export default async function updateAlbum(data: unknown) {
   };
 
   try {
-    await prisma.album.update({
+    await prisma.song.update({
       where: { id: parsed.data.id },
       data: updateData,
     });
-    revalidatePath("/albums");
+    revalidatePath("/songs");
   } catch (error) {
     let message = "Server error";
 
@@ -46,7 +46,7 @@ export default async function updateAlbum(data: unknown) {
       error instanceof Prisma.PrismaClientKnownRequestError &&
       error.code === "P2002"
     ) {
-      message = "Album already exists";
+      message = "Song already exists";
     }
 
     return {

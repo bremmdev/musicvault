@@ -12,7 +12,7 @@ export default async function AlbumsPage() {
 
   return (
     <>
-      <h1 className="text-3xl font-extralight text-center mt-12 mb-6">Albums</h1>
+      <h1 className="text-3xl font-extralight text-center mt-6 mb-4">Albums</h1>
       <AlbumsTable albums={albums} />
       <Suspense fallback={<Spinner />}>
         <CreateOrUpdateAlbum />

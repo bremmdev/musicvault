@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -10,12 +10,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Rating, Genre, Band } from "@prisma/client";
-import createAlbum from "@/_actions/albums/create-album";
-import { createAlbumSchema, updateAlbumSchema } from "@/lib/schema";
-import AlbumFormActions from "./AlbumFormActions";
-import updateAlbum from "@/_actions/albums/update-album";
-import { useAlbumStore } from "@/store/store";
+import { Rating, Genre, Band, Album } from "@prisma/client";
+import createSong from "@/_actions/songs/create-song";
+import { createSongSchema, updateSongSchema } from "@/lib/schema";
+import SongFormsActions from "./SongFormActions";
+import updateSong from "@/_actions/songs/update-song";
+import { useSongStore } from "@/store/store";
 import { Button } from "../../components/ui/button";
 import { PlusCircle } from "lucide-react";
 import FormErrors from "@/components/ui/FormErrors";
@@ -26,14 +26,18 @@ type Props = {
   ratings: Array<Rating>;
   genres: Array<Genre>;
   bands: Array<Band>;
+  albums: Array<Album>;
 };
 
-const CreateOrUpdateAlbumForm = ({ ratings, genres, bands }: Props) => {
-  const { showForm, setShowForm, selectedAlbum, setDeleteError } =
-    useAlbumStore();
+const CreateOrUpdateSongForm = ({ ratings, genres, bands, albums }: Props) => {
+  const { showForm, setShowForm, selectedSong, setDeleteError } =
+    useSongStore();
+
+  //use key to force re-render of album select when band changes
+  const [selectedBandId, setSelectedbandId] = React.useState("");
 
   const { formRef, formErrors, setFormErrors } = useForm({
-    selectedItem: selectedAlbum,
+    selectedItem: selectedSong,
     showForm,
   });
 
@@ -44,13 +48,14 @@ const CreateOrUpdateAlbumForm = ({ ratings, genres, bands }: Props) => {
     const input = {
       ...rawData,
       id: rawData.id || null,
+      //band is disabled when updating, so we need to get the bandId from the selected song
+      bandId: rawData.bandId || selectedSong?.bandId,
       genres: formData.getAll("genres"),
-      imageUrl: null,
     };
 
     //schema and actionFunction are different depending on whether we're creating or updating
-    const schema = input.id ? updateAlbumSchema : createAlbumSchema;
-    const actionFunction = input.id ? updateAlbum : createAlbum;
+    const schema = input.id ? updateSongSchema : createSongSchema;
+    const actionFunction = input.id ? updateSong : createSong;
 
     const parsed = schema.safeParse(input);
     if (parsed.success) {
@@ -78,28 +83,39 @@ const CreateOrUpdateAlbumForm = ({ ratings, genres, bands }: Props) => {
     setFormErrors([]);
   };
 
+  const handleBandChange = (bandId: string) => {
+    setSelectedbandId(bandId);
+  };
+
+  //only show albums from the selected band, or from the selected song's band
+  const availableAlbums = selectedSong
+    ? albums.filter((album) => album.bandId === selectedSong.bandId)
+    : selectedBandId
+    ? albums.filter((album) => album.bandId === selectedBandId)
+    : [];
+
   return showForm ? (
     <div className="my-8 flex mb-16">
       <form
         action={clientAction}
         className="flex flex-col gap-4 bg-slate-50 p-8 rounded-md max-w-5xl w-full mx-auto"
-        key={selectedAlbum?.id}
+        key={selectedSong?.id}
         ref={formRef}
       >
         {
           <h2 className="text-xl font-light mb-2 text-center">
-            {selectedAlbum ? `Update ${selectedAlbum.title}` : "Add new album"}
+            {selectedSong ? `Update ${selectedSong.title}` : "Add new song"}
           </h2>
         }
         <div className="flex flex-col md:flex-row gap-2">
           <input
             type="hidden"
             name="id"
-            defaultValue={selectedAlbum?.id || ""}
+            defaultValue={selectedSong?.id || ""}
           />
           <Select
             name="ratingId"
-            defaultValue={selectedAlbum?.ratingId || undefined}
+            defaultValue={selectedSong?.ratingId || undefined}
           >
             <SelectTrigger className="focus-visible:ring-offset-0 focus:ring-offset-0 md:max-w-[180px] hover:border-slate-400 data-[placeholder]:text-slate-400">
               <SelectValue placeholder="Select rating" />
@@ -120,12 +136,14 @@ const CreateOrUpdateAlbumForm = ({ ratings, genres, bands }: Props) => {
             className="focus-visible:ring-offset-0 hover:border-slate-400 placeholder:text-slate-400"
             placeholder="title"
             name="title"
-            defaultValue={selectedAlbum?.title || ""}
+            defaultValue={selectedSong?.title || ""}
             type="text"
           />
           <Select
             name="bandId"
-            defaultValue={selectedAlbum?.bandId || undefined}
+            defaultValue={selectedSong?.bandId || undefined}
+            onValueChange={(value) => handleBandChange(value)}
+            disabled={!!selectedSong}
           >
             <SelectTrigger className="focus-visible:ring-offset-0 focus:ring-offset-0 hover:border-slate-400 data-[placeholder]:text-slate-400">
               <SelectValue placeholder="Select band" />
@@ -140,18 +158,36 @@ const CreateOrUpdateAlbumForm = ({ ratings, genres, bands }: Props) => {
               </SelectGroup>
             </SelectContent>
           </Select>
+          <Select
+            name="albumId"
+            defaultValue={selectedSong?.albumId || undefined}
+            key={selectedBandId}
+          >
+            <SelectTrigger className="focus-visible:ring-offset-0 focus:ring-offset-0 hover:border-slate-400 data-[placeholder]:text-slate-400">
+              <SelectValue placeholder="Select album" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {availableAlbums.map((album) => (
+                  <SelectItem key={album.id} value={album.id}>
+                    {album.title}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
           <Input
             className="md:max-w-[180px] focus-visible:ring-offset-0 hover:border-slate-400 placeholder:text-slate-400"
             placeholder="year"
             name="yearReleased"
-            defaultValue={selectedAlbum?.yearReleased || ""}
+            defaultValue={selectedSong?.yearReleased || ""}
             type="text"
           />
         </div>
         <div className="-mt-2">
           <MultiSelectInput
             defaultValue={
-              selectedAlbum?.genres.map((genre) => ({
+              selectedSong?.genres.map((genre) => ({
                 value: genre.id,
                 label: genre.name,
               })) || []
@@ -162,16 +198,16 @@ const CreateOrUpdateAlbumForm = ({ ratings, genres, bands }: Props) => {
           />
         </div>
         {formErrors.length > 0 && (
-          <FormErrors errors={formErrors} title="Saving album failed" />
+          <FormErrors errors={formErrors} title="Saving song failed" />
         )}
-        <AlbumFormActions />
+        <SongFormsActions />
       </form>
     </div>
   ) : (
     <Button className="flex gap-2 w-fit mx-auto my-8" onClick={handleClick}>
-      Add album <PlusCircle strokeWidth={2} size={20} />
+      Add song <PlusCircle strokeWidth={2} size={20} />
     </Button>
   );
 };
 
-export default CreateOrUpdateAlbumForm;
+export default CreateOrUpdateSongForm;

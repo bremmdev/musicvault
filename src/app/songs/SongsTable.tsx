@@ -10,7 +10,7 @@ import {
   TableCell,
 } from "../../components/ui/table";
 import { SongWithDetails } from "@/types/types";
-import deleteBand from "@/_actions/bands/delete-band";
+import deleteSong from "@/_actions/songs/delete-song";
 import { useSession } from "next-auth/react";
 import { useSongStore } from "@/store/store";
 import Rating from "@/components/ui/Rating";
@@ -48,7 +48,7 @@ const SongsTable = ({ songs }: Props) => {
       setOptimisticSongs(newOptimisticSongs);
     });
     setIsDeleting(true);
-    const res = await deleteBand(id);
+    const res = await deleteSong(id);
     if (res?.error) {
       setDeleteError({
         message: res.error,

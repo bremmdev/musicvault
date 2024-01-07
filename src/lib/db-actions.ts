@@ -71,6 +71,14 @@ export const getBands = cache(async () => {
   });
 });
 
+export const getAlbums = cache(async () => {
+  return await prisma.album.findMany({
+    orderBy: {
+      title: "asc",
+    },
+  });
+});
+
 export const getRatings = cache(async () => {
   return await prisma.rating.findMany();
 });
@@ -83,22 +91,26 @@ export const getGenres = cache(async () => {
   });
 });
 
-export const getCreateOrUpdateDataDTO = cache(async (includeBands = false) => {
-  const session = await getServerSession(AuthOptions);
+export const getCreateOrUpdateDataDTO = cache(
+  async (includeBandsAndAlbums: boolean) => {
+    const session = await getServerSession(AuthOptions);
 
-  if (!session) {
-    return null;
+    if (!session) {
+      return null;
+    }
+
+    const [ratings, genres, bands, albums] = await Promise.all([
+      getRatings(),
+      getGenres(),
+      includeBandsAndAlbums && getBands(),
+      includeBandsAndAlbums && getAlbums(),
+    ]);
+
+    return {
+      ratings,
+      genres,
+      bands,
+      albums,
+    };
   }
-
-  const [ratings, genres, bands] = await Promise.all([
-    getRatings(),
-    getGenres(),
-    includeBands ? getBands() : null,
-  ]);
-
-  return {
-    ratings,
-    genres,
-    bands,
-  };
-});
+);
