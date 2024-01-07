@@ -92,7 +92,7 @@ export const getGenres = cache(async () => {
 });
 
 export const getCreateOrUpdateDataDTO = cache(
-  async (includeBandsAndAlbums: boolean) => {
+  async (includeBandsAndAlbums = false) => {
     const session = await getServerSession(AuthOptions);
 
     if (!session) {
